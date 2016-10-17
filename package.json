@@ -5,7 +5,10 @@
   "main": "index.js",
   "scripts": {
     "prestart": "npm install",
-    "start": "webpack-dev-server"
+    "start": "webpack-dev-server",
+    "build": "webpack",
+    "predeploy": "npm run build",
+    "deploy": "node publish"
   },
   "repository": {
     "type": "git",
@@ -24,9 +27,10 @@
   "devDependencies": {
     "babel-core": "^6.17.0",
     "babel-loader": "^6.2.5",
+    "babel-plugin-transform-decorators-legacy": "1.3.4",
     "babel-preset-es2015": "6.5.0",
     "babel-preset-stage-1": "6.5.0",
-    "babel-plugin-transform-decorators-legacy": "1.3.4",
+    "gh-pages": "0.11.0",
     "webpack": "^1.13.2",
     "webpack-dev-server": "^1.16.2"
   },
