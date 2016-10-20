@@ -6,7 +6,7 @@ const domHandler = {
     set: function (target,name,value) {
         const toReturn = target[name] = value;
         updateDom(viewState);
-        return toReturn;
+        return true;
     }
 };
 

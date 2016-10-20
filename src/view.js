@@ -2,60 +2,44 @@ import { h, diff } from 'virtual-dom';
 
 export const render = (state) => {
 
-    const {left, top} = state;
+    const {todos} = state;
 
-    const STEP = 20;
-
-    const onRightButton = () => {
-        state.left += STEP;
+    const onAddClick = () => {
+        state.todos = [...state.todos,state.currentTodo];
+        state.currentTodo = "";
     };
 
-    const onLeftButton = () => {
-        state.left -= STEP;
+    const onInputValueChange = (event) => {
+        state.currentTodo = event.target.value;
     };
 
-    const onUpButton = () => {
-        state.top -= STEP;
-    };
+    const addButton = h('button',{
+        onclick:onAddClick
+    },['Add Todo']);
 
-    const onDownButton = () => {
-        state.top += STEP;
-    };
-
-    const square = h('div',{
-        style: {
-            backgroundColor: 'red',
-            width: '100px',
-            height: '100px',
-            position: 'fixed',
-            left: left + 'px',
-            top: top + 'px'
-        }
+    const input = h('input',{
+        type:'text',
+        value:state.currentTodo,
+        oninput:onInputValueChange
     });
 
-    const leftButton = h('button',{
-        onclick:onLeftButton
-    },['Left']);
-
-    const rightButton = h('button',{
-        onclick:onRightButton
-    },['Right']);
-
-    const upButton = h('button',{
-        onclick:onUpButton
-    },['Up']);
-
-    const downButton = h('button',{
-        onclick:onDownButton
-    },['Down']);
-
-    return h('div', {}, [
-        leftButton,
-        rightButton,
-        upButton,
-        downButton,
-        square
+    const form = h('div',{},[
+        input,
+        addButton
     ]);
+
+    const elements = todos.map((t) => {
+        return h('li', {}, t);
+    });
+
+    const list = h('ul', {}, elements);
+
+    return h('div', {
+        style: {
+            width: '100%',
+            height: '100%'
+        }
+    }, [form,list]);
 };
 
 export const update = ({tree,state}) => {

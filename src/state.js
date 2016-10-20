@@ -8,13 +8,14 @@ const loggingHandler = {
     },
     set: function (target,name,value) {
         console.log(`setting ${name}: ${value}`);
-        return target[name] = value;
+        target[name] = value;
+        return true;
     }
 };
 
 const INITIAL_STATE = {
-    left:200,
-    top:0
+    todos:['first','second'],
+    currentTodo:"todo"
 };
 
 export default new Proxy(INITIAL_STATE,loggingHandler);
