@@ -15,7 +15,7 @@ const loggingHandler = {
 
 const INITIAL_STATE = {
     todos:['first','second'],
-    currentTodo:"todo"
+    currentTodo:""
 };
 
 export default new Proxy(INITIAL_STATE,loggingHandler);
