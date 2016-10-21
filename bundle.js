@@ -50,23 +50,20 @@
 
 	var _view = __webpack_require__(36);
 
-	var _state = __webpack_require__(37);
+	var _loggable = __webpack_require__(39);
 
-	var _state2 = _interopRequireDefault(_state);
+	var _loggable2 = _interopRequireDefault(_loggable);
+
+	var _observable = __webpack_require__(40);
+
+	var _observable2 = _interopRequireDefault(_observable);
 
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
-	var domHandler = {
-	    set: function set(target, name, value) {
-	        var toReturn = target[name] = value;
-	        updateDom(viewState);
-	        return toReturn;
-	    }
+	var state = {
+	    todos: ['first', 'second'],
+	    currentTodo: ""
 	};
-
-	var viewState = new Proxy(_state2.default, domHandler);
-	var tree = (0, _view.render)(viewState);
-	var rootNode = (0, _virtualDom.create)(tree);
 
 	var updateDom = function updateDom(state) {
 	    var renderData = (0, _view.update)({
@@ -77,6 +74,14 @@
 	    tree = renderData.tree;
 	    rootNode = (0, _virtualDom.patch)(rootNode, renderData.patches);
 	};
+
+	var viewState = (0, _observable2.default)({
+	    target: (0, _loggable2.default)(state),
+	    listener: updateDom
+	});
+
+	var tree = (0, _view.render)(viewState);
+	var rootNode = (0, _virtualDom.create)(tree);
 
 	document.body.appendChild(rootNode);
 
@@ -1897,57 +1902,23 @@
 
 	var _virtualDom = __webpack_require__(1);
 
+	var _form = __webpack_require__(37);
+
+	var _form2 = _interopRequireDefault(_form);
+
+	var _list = __webpack_require__(38);
+
+	var _list2 = _interopRequireDefault(_list);
+
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
 	var render = exports.render = function render(state) {
-	    var left = state.left;
-	    var top = state.top;
-
-
-	    var STEP = 20;
-
-	    var onRightButton = function onRightButton() {
-	        state.left += STEP;
-	    };
-
-	    var onLeftButton = function onLeftButton() {
-	        state.left -= STEP;
-	    };
-
-	    var onUpButton = function onUpButton() {
-	        state.top -= STEP;
-	    };
-
-	    var onDownButton = function onDownButton() {
-	        state.top += STEP;
-	    };
-
-	    var square = (0, _virtualDom.h)('div', {
+	    return (0, _virtualDom.h)('div', {
 	        style: {
-	            backgroundColor: 'red',
-	            width: '100px',
-	            height: '100px',
-	            position: 'fixed',
-	            left: left + 'px',
-	            top: top + 'px'
+	            width: '100%',
+	            height: '100%'
 	        }
-	    });
-
-	    var leftButton = (0, _virtualDom.h)('button', {
-	        onclick: onLeftButton
-	    }, ['Left']);
-
-	    var rightButton = (0, _virtualDom.h)('button', {
-	        onclick: onRightButton
-	    }, ['Right']);
-
-	    var upButton = (0, _virtualDom.h)('button', {
-	        onclick: onUpButton
-	    }, ['Up']);
-
-	    var downButton = (0, _virtualDom.h)('button', {
-	        onclick: onDownButton
-	    }, ['Down']);
-
-	    return (0, _virtualDom.h)('div', {}, [leftButton, rightButton, upButton, downButton, square]);
+	    }, [(0, _form2.default)(state), (0, _list2.default)(state)]);
 	};
 
 	var update = exports.update = function update(_ref) {
@@ -1965,6 +1936,81 @@
 
 /***/ },
 /* 37 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+
+	Object.defineProperty(exports, "__esModule", {
+	    value: true
+	});
+
+	var _virtualDom = __webpack_require__(1);
+
+	function _toConsumableArray(arr) { if (Array.isArray(arr)) { for (var i = 0, arr2 = Array(arr.length); i < arr.length; i++) { arr2[i] = arr[i]; } return arr2; } else { return Array.from(arr); } }
+
+	exports.default = function (state) {
+	    var onAddClick = function onAddClick() {
+	        if (state.currentTodo) {
+	            state.todos = [].concat(_toConsumableArray(state.todos), [state.currentTodo]);
+	            state.currentTodo = "";
+	        }
+	    };
+
+	    var onInputValueChange = function onInputValueChange(event) {
+	        state.currentTodo = event.target.value;
+	    };
+
+	    var addButton = (0, _virtualDom.h)('button', {
+	        onclick: onAddClick,
+	        disabled: !state.currentTodo
+	    }, ['Add Todo']);
+
+	    var input = (0, _virtualDom.h)('input', {
+	        type: 'text',
+	        value: state.currentTodo,
+	        oninput: onInputValueChange
+	    });
+
+	    return (0, _virtualDom.h)('div', {}, [input, addButton]);
+	};
+
+/***/ },
+/* 38 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+
+	Object.defineProperty(exports, "__esModule", {
+	    value: true
+	});
+
+	var _virtualDom = __webpack_require__(1);
+
+	function _toConsumableArray(arr) { if (Array.isArray(arr)) { for (var i = 0, arr2 = Array(arr.length); i < arr.length; i++) { arr2[i] = arr[i]; } return arr2; } else { return Array.from(arr); } }
+
+	exports.default = function (state) {
+	    var onRemoveClick = function onRemoveClick(index) {
+	        state.todos.splice(index, 1);
+	        state.todos = [].concat(_toConsumableArray(state.todos));
+	    };
+
+	    var createDeleteButton = function createDeleteButton(index) {
+	        return (0, _virtualDom.h)('button', {
+	            onclick: function onclick() {
+	                return onRemoveClick(index);
+	            }
+	        }, ['Delete']);
+	    };
+
+	    var elements = state.todos.map(function (t, index) {
+	        return (0, _virtualDom.h)('li', {}, [t, createDeleteButton(index)]);
+	    });
+
+	    return (0, _virtualDom.h)('ul', {}, elements);
+	};
+
+/***/ },
+/* 39 */
 /***/ function(module, exports) {
 
 	"use strict";
@@ -1972,26 +2018,59 @@
 	Object.defineProperty(exports, "__esModule", {
 	    value: true
 	});
-	var state = void 0;
 
-	var loggingHandler = {
-	    get: function get(target, name) {
-	        var value = target[name];
-	        console.log("getting " + name + ": " + value);
-	        return value;
-	    },
-	    set: function set(target, name, value) {
-	        console.log("setting " + name + ": " + value);
-	        return target[name] = value;
-	    }
+	exports.default = function (target) {
+	    var loggingHandler = {
+	        get: function get(target, name) {
+	            var value = target[name];
+	            console.log("getting " + name + ": " + value);
+	            return value;
+	        },
+	        set: function set(target, name, value) {
+	            console.log("setting " + name + ": " + value);
+	            target[name] = value;
+	            return true;
+	        }
+	    };
+
+	    return new Proxy(target, loggingHandler);
 	};
 
-	var INITIAL_STATE = {
-	    left: 200,
-	    top: 0
-	};
+/***/ },
+/* 40 */
+/***/ function(module, exports) {
 
-	exports.default = new Proxy(INITIAL_STATE, loggingHandler);
+	"use strict";
+
+	Object.defineProperty(exports, "__esModule", {
+	    value: true
+	});
+
+	exports.default = function (_ref) {
+	    var target = _ref.target;
+	    var listener = _ref.listener;
+
+	    var observable = void 0;
+
+	    var set = function set(target, name, value) {
+	        target[name] = value;
+	        listener(observable);
+	        return true;
+	    };
+
+	    var get = function get(target, name) {
+	        return Object.freeze(target[name]);
+	    };
+
+	    var handler = {
+	        set: set,
+	        get: get
+	    };
+
+	    observable = new Proxy(target, handler);
+
+	    return observable;
+	};
 
 /***/ }
 /******/ ]);
