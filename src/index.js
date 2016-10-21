@@ -1,18 +1,12 @@
 import { patch, create } from 'virtual-dom';
 import { render, update } from './view';
-import state from './state';
+import loggable from './loggable';
+import observable from './observable';
 
-const domHandler = {
-    set: function (target,name,value) {
-        const toReturn = target[name] = value;
-        updateDom(viewState);
-        return true;
-    }
+const state = {
+    todos:['first','second'],
+    currentTodo:""
 };
-
-let viewState = new Proxy(state,domHandler);
-let tree = render(viewState);
-let rootNode = create(tree);
 
 const updateDom = (state) => {
     const renderData = update({
@@ -23,5 +17,13 @@ const updateDom = (state) => {
     tree = renderData.tree;
     rootNode = patch(rootNode, renderData.patches);
 };
+
+const viewState = observable({
+    target:loggable(state),
+    listener:updateDom
+});
+
+let tree = render(viewState);
+let rootNode = create(tree);
 
 document.body.appendChild(rootNode);
