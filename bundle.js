@@ -1990,8 +1990,7 @@
 
 	exports.default = function (state) {
 	    var onRemoveClick = function onRemoveClick(index) {
-	        state.todos.splice(index, 1);
-	        state.todos = [].concat(_toConsumableArray(state.todos));
+	        state.todos = [].concat(_toConsumableArray(state.todos.slice(0, index)), _toConsumableArray(state.todos.slice(index + 1)));
 	    };
 
 	    var createDeleteButton = function createDeleteButton(index) {
