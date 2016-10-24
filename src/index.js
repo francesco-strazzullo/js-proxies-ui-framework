@@ -3,11 +3,6 @@ import { render, update } from './view';
 import loggable from './loggable';
 import observable from './observable';
 
-const state = {
-    todos:[],
-    todoInputText:""
-};
-
 const updateDom = (state) => {
     const newTree = render(state);
     const patches = diff(tree, newTree);
@@ -16,12 +11,17 @@ const updateDom = (state) => {
     rootNode = patch(rootNode, patches);
 };
 
-const viewState = observable({
-    target:loggable(state),
+const INITIAL_STATE = {
+    todos:[],
+    todoInputText:""
+};
+
+const state = observable({
+    target:loggable(INITIAL_STATE),
     listener:updateDom
 });
 
-let tree = render(viewState);
+let tree = render(state);
 let rootNode = create(tree);
 
 document.body.appendChild(rootNode);
