@@ -1,4 +1,4 @@
-import { h, diff } from 'virtual-dom';
+import { h } from 'virtual-dom';
 
 export default (state) => {
     const onRemoveClick = (index) => {
