@@ -4,7 +4,7 @@ import loggable from './loggable';
 import observable from './observable';
 
 const state = {
-    todos:['first','second'],
+    todos:[],
     currentTodo:""
 };
 

@@ -5,13 +5,17 @@ export default (state) => {
         state.todos = [...state.todos.slice(0, index), ...state.todos.slice(index + 1)];
     };
 
-    const createDeleteButton = (index) => h('button',{
+    const createDeleteButton = (text,index) => h('button.list-group-item',{
         onclick:() => onRemoveClick(index)
-    },['Delete']);
+    },[text + ' (click to delete)']);
 
-    const elements = state.todos.map((t,index) => {
-        return h('li', {}, [t,createDeleteButton(index)]);
-    });
 
-    return h('ul', {}, elements);
+    const elements = state.todos.map((t,index) => createDeleteButton(t,index));
+
+    return h('div.container',{},[
+        h('div.list-group',{},[
+            elements
+        ])
+    ])
+
 };
