@@ -5,7 +5,7 @@ import observable from './observable';
 
 const state = {
     todos:[],
-    currentTodo:""
+    todoInputText:""
 };
 
 const updateDom = (state) => {

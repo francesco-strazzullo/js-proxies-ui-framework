@@ -2,25 +2,25 @@ import { h, diff } from 'virtual-dom';
 
 export default (state) => {
     const onAddClick = () => {
-        if(state.currentTodo){
-            state.todos = [...state.todos,state.currentTodo];
-            state.currentTodo = "";
+        if(state.todoInputText){
+            state.todos = [...state.todos,state.todoInputText];
+            state.todoInputText = "";
         }
     };
 
     const onInputValueChange = (event) => {
-        state.currentTodo = event.target.value;
+        state.todoInputText = event.target.value;
     };
 
     const addButton = h('button.btn.btn-default',{
         onclick:onAddClick,
-        disabled:!state.currentTodo
+        disabled:!state.todoInputText
     },['Add Todo']);
 
     const input = h('input.form-control',{
         placeholder:'Insert Todo Here...',
         type:'text',
-        value:state.currentTodo,
+        value:state.todoInputText,
         oninput:onInputValueChange
     });
 
