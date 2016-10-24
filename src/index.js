@@ -1,4 +1,4 @@
-import { patch, create } from 'virtual-dom';
+import { patch, create, diff } from 'virtual-dom';
 import { render, update } from './view';
 import loggable from './loggable';
 import observable from './observable';
@@ -9,13 +9,11 @@ const state = {
 };
 
 const updateDom = (state) => {
-    const renderData = update({
-        tree,
-        state
-    });
+    const newTree = render(state);
+    const patches = diff(tree, newTree);
 
-    tree = renderData.tree;
-    rootNode = patch(rootNode, renderData.patches);
+    tree = newTree;
+    rootNode = patch(rootNode, patches);
 };
 
 const viewState = observable({
