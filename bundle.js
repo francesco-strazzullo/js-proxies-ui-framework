@@ -61,7 +61,7 @@
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 	var state = {
-	    todos: ['first', 'second'],
+	    todos: [],
 	    currentTodo: ""
 	};
 
@@ -1913,12 +1913,7 @@
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 	var render = exports.render = function render(state) {
-	    return (0, _virtualDom.h)('div', {
-	        style: {
-	            width: '100%',
-	            height: '100%'
-	        }
-	    }, [(0, _form2.default)(state), (0, _list2.default)(state)]);
+	    return (0, _virtualDom.h)('div', {}, [(0, _form2.default)(state), (0, _list2.default)(state)]);
 	};
 
 	var update = exports.update = function update(_ref) {
@@ -1948,6 +1943,23 @@
 
 	function _toConsumableArray(arr) { if (Array.isArray(arr)) { for (var i = 0, arr2 = Array(arr.length); i < arr.length; i++) { arr2[i] = arr[i]; } return arr2; } else { return Array.from(arr); } }
 
+	/*
+
+	 <nav class="navbar navbar-default">
+	 <div class="container-fluid">
+	 <div class="navbar-header">
+	 <a href="#" class="navbar-brand">Brand</a>
+	 </div>
+	 <form class="navbar-form navbar-left">
+	 <div class="form-group">
+	 <input class="form-control" placeholder="Search">
+	 </div>
+	 <button type="submit" class="btn btn-default">Submit</button>
+	 </form>
+	 </div>
+	 </nav>
+	 */
+
 	exports.default = function (state) {
 	    var onAddClick = function onAddClick() {
 	        if (state.currentTodo) {
@@ -1960,18 +1972,19 @@
 	        state.currentTodo = event.target.value;
 	    };
 
-	    var addButton = (0, _virtualDom.h)('button', {
+	    var addButton = (0, _virtualDom.h)('button.btn.btn-default', {
 	        onclick: onAddClick,
 	        disabled: !state.currentTodo
 	    }, ['Add Todo']);
 
-	    var input = (0, _virtualDom.h)('input', {
+	    var input = (0, _virtualDom.h)('input.form-control', {
+	        placeholder: 'Insert Todo Here...',
 	        type: 'text',
 	        value: state.currentTodo,
 	        oninput: onInputValueChange
 	    });
 
-	    return (0, _virtualDom.h)('div', {}, [input, addButton]);
+	    return (0, _virtualDom.h)('nav.navbar.navbar-default', {}, [(0, _virtualDom.h)('div.container-fuild', {}, [(0, _virtualDom.h)('div.navbar-header', {}, [(0, _virtualDom.h)('a.navbar-brand', {}, ['Ego.js'])]), (0, _virtualDom.h)('form.navbar-form.navbar-left', {}, [(0, _virtualDom.h)('div.form-group', {}, [input]), addButton])])]);
 	};
 
 /***/ },
@@ -1993,19 +2006,19 @@
 	        state.todos = [].concat(_toConsumableArray(state.todos.slice(0, index)), _toConsumableArray(state.todos.slice(index + 1)));
 	    };
 
-	    var createDeleteButton = function createDeleteButton(index) {
-	        return (0, _virtualDom.h)('button', {
+	    var createDeleteButton = function createDeleteButton(text, index) {
+	        return (0, _virtualDom.h)('button.list-group-item', {
 	            onclick: function onclick() {
 	                return onRemoveClick(index);
 	            }
-	        }, ['Delete']);
+	        }, [text + ' (click to delete)']);
 	    };
 
 	    var elements = state.todos.map(function (t, index) {
-	        return (0, _virtualDom.h)('li', {}, [t, createDeleteButton(index)]);
+	        return createDeleteButton(t, index);
 	    });
 
-	    return (0, _virtualDom.h)('ul', {}, elements);
+	    return (0, _virtualDom.h)('div.container', {}, [(0, _virtualDom.h)('div.list-group', {}, [elements])]);
 	};
 
 /***/ },
