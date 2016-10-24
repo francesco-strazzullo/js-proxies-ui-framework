@@ -1,22 +1,5 @@
 import { h, diff } from 'virtual-dom';
 
-/*
-
- <nav class="navbar navbar-default">
- <div class="container-fluid">
- <div class="navbar-header">
- <a href="#" class="navbar-brand">Brand</a>
- </div>
- <form class="navbar-form navbar-left">
- <div class="form-group">
- <input class="form-control" placeholder="Search">
- </div>
- <button type="submit" class="btn btn-default">Submit</button>
- </form>
- </div>
- </nav>
- */
-
 export default (state) => {
     const onAddClick = () => {
         if(state.currentTodo){
