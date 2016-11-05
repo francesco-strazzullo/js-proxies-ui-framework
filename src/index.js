@@ -1,5 +1,5 @@
 import { patch, create, diff } from 'virtual-dom';
-import { render, update } from './view';
+import { render } from './view';
 import loggable from './loggable';
 import observable from './observable';
 
